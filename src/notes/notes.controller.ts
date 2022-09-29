@@ -3,6 +3,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { NotesService } from './notes.service';
 import { Note } from './shemas/note.type';
+import { Stat } from './shemas/stats.type';
 
 @Controller('notes')
 export class NotesController {
@@ -14,6 +15,11 @@ export class NotesController {
     @Get()
     getAll(): Note[] {
         return  this.notesService.getAll()
+    }
+
+    @Get('/stats')
+    calculateStats(): Stat[] {
+        return  this.notesService.calculateStats()
     }
 
     @Get(':id')
@@ -46,22 +52,22 @@ export class NotesController {
         return  this.notesService.restoreById(id)
     }
 
-    @Patch('notes/archive')
+    @Patch('/notes/archive')
     archiveAll(): Note[] {
         return  this.notesService.archiveAll()
     }
 
-    @Patch('notes/restore')
+    @Patch('/notes/restore')
     restoreAll(): Note[] {
         return  this.notesService.restoreAll()
     }
 
-    @Delete('notes/archive')
+    @Delete('/notes/archive')
     removeAllToggle(): Note[] {
         return  this.notesService.removeAllNotes()
     }
 
-    @Delete('notes/restore')
+    @Delete('/notes/restore')
     removeAllArchive(): Note[] {
         return  this.notesService.removeAllArchive()
     }

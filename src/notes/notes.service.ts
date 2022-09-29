@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateNoteDto } from "./dto/create-note.dto";
 import { UpdateNoteDto } from "./dto/update-note.dto";
 import { Note } from "./shemas/note.type";
+import { Stat } from "./shemas/stats.type";
 
 @Injectable()
 export class NotesService {
@@ -176,5 +177,17 @@ export class NotesService {
         this.notes = this.notes.filter(note => note.archive) 
 
         return this.notes
+    }
+
+    calculateStats(): Stat[] {
+        const category = [ ... new Set(this.notes.map(note => note.category)) ] 
+        const stats: Stat[] = category.map(category => { 
+            return { 
+                name: category, 
+                note_count: this.notes.filter(note => !note.archive && category == note.category).length, 
+                archive_count: this.notes.filter(note => note.archive && category == note.category).length 
+            }})
+
+        return stats
     }
 }
