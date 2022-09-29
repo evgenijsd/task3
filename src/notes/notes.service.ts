@@ -93,7 +93,9 @@ export class NotesService {
     }
 
     getById(id: string): Note {
-        return this.notes.find(x => x.id === id)
+        let note = this.notes.find(x => x.id === id)
+
+        return note
     }
 
     create(noteDto: CreateNoteDto): Note {
@@ -107,12 +109,12 @@ export class NotesService {
     }
 
     delete(id: string): Note {
-        let note = new Note
-        note = this.notes.find(x => x.id === id)
+        let note = this.notes.find(x => x.id === id)
 
         if (note) {
             this.notes = this.notes.filter(x => x.id !== id)
         }
+        else 
 
         return note
     }
@@ -121,12 +123,58 @@ export class NotesService {
         const note = { ...noteDto, id }
 
         if (this.notes.find(x => x.id === id)) {
-            this.notes.map(x => (x.id === id ? note : x))
+            this.notes = this.notes.map(x => (x.id === id ? note : x))
             return note
         }
         else {
             return this.create(noteDto)
         }
         
+    }
+
+    archiveById(id: string): Note {
+        let note = this.notes.find(x => x.id === id)
+
+        if (note) {
+            note.archive = true
+            this.notes.map(x => (x.id === id ? note : x))            
+        }
+
+        return note       
+    }
+
+    restoreById(id: string): Note {
+        let note = this.notes.find(x => x.id === id)
+
+        if (note) {
+            note.archive = false
+            this.notes.map(x => (x.id === id ? note : x))            
+        }
+        
+        return note       
+    }
+
+    archiveAll(): Note[] {
+        this.notes.forEach(note => note.archive = true )        
+
+        return this.notes
+    }
+
+    restoreAll(): Note[] {
+        this.notes.forEach(note => note.archive = false )        
+
+        return this.notes
+    }
+
+    removeAllNotes(): Note[] {
+        this.notes = this.notes.filter(note => !note.archive) 
+
+        return this.notes
+    }
+
+    removeAllArchive(): Note[] {
+        this.notes = this.notes.filter(note => note.archive) 
+
+        return this.notes
     }
 }

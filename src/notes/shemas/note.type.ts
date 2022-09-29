@@ -1,10 +1,10 @@
 export class Note {
-    readonly id: string
-    readonly archive: boolean
-    readonly category: string
-    readonly content: string
-    readonly created: Date
-    readonly dates: string
-    readonly name: string
-    readonly picture: string
+    id: string
+    archive: boolean
+    category: string
+    content: string
+    created: Date
+    dates: string
+    name: string
+    picture: string
 }
