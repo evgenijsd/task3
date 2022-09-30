@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { CreateNoteDto } from "./dto/create-note.dto";
 import { UpdateNoteDto } from "./dto/update-note.dto";
-import { Note } from "./shemas/note.type";
-import { Stat } from "./shemas/stats.type";
+import { Note } from "./schemas/note.type";
+import { Stat } from "./schemas/stats.type";
 
 @Injectable()
 export class NotesService {
@@ -110,12 +110,11 @@ export class NotesService {
     }
 
     delete(id: string): Note {
-        let note = this.notes.find(x => x.id === id)
+        const note = this.notes.find(x => x.id === id)
 
         if (note) {
             this.notes = this.notes.filter(x => x.id !== id)
         }
-        else 
 
         return note
     }

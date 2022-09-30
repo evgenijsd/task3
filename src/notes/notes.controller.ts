@@ -1,9 +1,12 @@
-import { Controller, Get, Param, Post, Delete, Patch, Body, Put, Req } from '@nestjs/common';
+import { Controller, Get, Param, Post, Delete, Patch, Body, Put, Req, ParseIntPipe, UsePipes } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
+import { JoiValidationPipe } from './dto/joi-validation.pipe';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { NotesService } from './notes.service';
-import { Note } from './shemas/note.type';
-import { Stat } from './shemas/stats.type';
+import { createNoteSchema } from './schemas/create-note.schema';
+import { Note } from './schemas/note.type';
+import { Stat } from './schemas/stats.type';
+import { updateNoteSchema } from './schemas/update-note.schema';
 
 @Controller('notes')
 export class NotesController {
@@ -28,6 +31,7 @@ export class NotesController {
     }
 
     @Post()
+    @UsePipes(new JoiValidationPipe(createNoteSchema))
     create(@Body() createNoteDto: CreateNoteDto): Note {
         return this.notesService.create(createNoteDto)
     }
@@ -38,7 +42,8 @@ export class NotesController {
     }
 
     @Patch(':id')
-    update(@Body() updateNoteDto: UpdateNoteDto, @Param('id') id: string): Note {
+    update(@Body(new JoiValidationPipe(updateNoteSchema)) updateNoteDto: UpdateNoteDto, 
+        @Param('id') id: string): Note {
         return this.notesService.update(id, updateNoteDto)
     }
 
