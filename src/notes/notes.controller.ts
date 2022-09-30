@@ -1,8 +1,12 @@
-import { Controller, Get, Param, Post, Delete, Patch, Body, Put } from '@nestjs/common';
+import { Controller, Get, Param, Post, Delete, Patch, Body, Put, Req, ParseIntPipe, UsePipes } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
+import { JoiValidationPipe } from './dto/joi-validation.pipe';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { NotesService } from './notes.service';
-import { Note } from './shemas/note.type';
+import { createNoteSchema } from './schemas/create-note.schema';
+import { Note } from './schemas/note.type';
+import { Stat } from './schemas/stats.type';
+import { updateNoteSchema } from './schemas/update-note.schema';
 
 @Controller('notes')
 export class NotesController {
@@ -16,12 +20,18 @@ export class NotesController {
         return  this.notesService.getAll()
     }
 
+    @Get('/stats')
+    calculateStats(): Stat[] {
+        return  this.notesService.calculateStats()
+    }
+
     @Get(':id')
     getById(@Param('id') id: string): Note {
         return this.notesService.getById(id)
     }
 
     @Post()
+    @UsePipes(new JoiValidationPipe(createNoteSchema))
     create(@Body() createNoteDto: CreateNoteDto): Note {
         return this.notesService.create(createNoteDto)
     }
@@ -32,7 +42,38 @@ export class NotesController {
     }
 
     @Patch(':id')
-    update(@Body() updateNoteDto: UpdateNoteDto, @Param('id') id: string): Note {
+    update(@Body(new JoiValidationPipe(updateNoteSchema)) updateNoteDto: UpdateNoteDto, 
+        @Param('id') id: string): Note {
         return this.notesService.update(id, updateNoteDto)
+    }
+
+    @Patch('/archive/:id')
+    archiveById(@Param('id') id: string): Note {
+        return  this.notesService.archiveById(id)
+    }
+
+    @Patch('/restore/:id')
+    restoreById(@Param('id') id: string): Note {
+        return  this.notesService.restoreById(id)
+    }
+
+    @Patch('/notes/archive')
+    archiveAll(): Note[] {
+        return  this.notesService.archiveAll()
+    }
+
+    @Patch('/notes/restore')
+    restoreAll(): Note[] {
+        return  this.notesService.restoreAll()
+    }
+
+    @Delete('/notes/archive')
+    removeAllToggle(): Note[] {
+        return  this.notesService.removeAllNotes()
+    }
+
+    @Delete('/notes/restore')
+    removeAllArchive(): Note[] {
+        return  this.notesService.removeAllArchive()
     }
 }
