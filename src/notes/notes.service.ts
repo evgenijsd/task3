@@ -120,14 +120,21 @@ export class NotesService {
     }
 
     update(id: string, noteDto: UpdateNoteDto): Note {
-        const note = { ...noteDto, id }
+        const note = this.notes.find(x => x.id === id)
 
-        if (this.notes.find(x => x.id === id)) {
-            this.notes = this.notes.map(x => (x.id === id ? note : x))
+        if (note) {
+            if (noteDto.name != undefined) note.name = noteDto.name
+            if (noteDto.archive != undefined) note.archive = noteDto.archive
+            if (noteDto.category != undefined) note.category = noteDto.category
+            if (noteDto.content != undefined) note.content = noteDto.content
+            if (noteDto.created!= undefined) note.created = noteDto.created
+            if (noteDto.dates != undefined) note.dates = noteDto.dates
+            if (noteDto.picture != undefined) note.picture = noteDto.picture
+
             return note
         }
         else {
-            return this.create(noteDto)
+            return note
         }
         
     }
