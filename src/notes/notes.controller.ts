@@ -42,9 +42,9 @@ export class NotesController {
     }
 
     @Patch(':id')
-    update(@Body(new JoiValidationPipe(updateNoteSchema)) updateNoteDto: UpdateNoteDto, 
+    update(@Body(new JoiValidationPipe(updateNoteSchema)) updateNote: UpdateNoteDto, 
         @Param('id') id: string): Note {
-        return this.notesService.update(id, updateNoteDto)
+        return this.notesService.update(id, updateNote)
     }
 
     @Patch('/archive/:id')
