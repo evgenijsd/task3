@@ -4,7 +4,9 @@ import { AppService } from './app.service';
 import { NotesModule } from './notes/notes.module';
 
 @Module({
-  imports: [NotesModule],
+  imports: [
+    NotesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

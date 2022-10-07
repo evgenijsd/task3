@@ -1,0 +1,36 @@
+version: '2.10.2'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRESS_PASSWORD=1234567
+      - POSTGRES_DB=db
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - db
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=admin
+      - DB_PW=1234567 
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
