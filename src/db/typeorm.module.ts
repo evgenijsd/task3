@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule as NestTypeOrmModule } from '@nestjs/typeorm'
+import { NoteBase } from './note.entity'
 
 
 @Module({
@@ -10,8 +11,8 @@ import { TypeOrmModule as NestTypeOrmModule } from '@nestjs/typeorm'
       port: 5432,
       username: 'admin',
       password: '1234567',
-      database: process.env.POSTGRES_DATABASE,
-      entities: [ 'dist/entities/**/*.entity.js' ],
+      database: 'db',
+      entities: [ NoteBase ],
       synchronize: true,
       // migrations: [ 'dist/db/migrations/**/*.js' ],
       // cli: { migrationsDir: 'src/db/migrations' },
